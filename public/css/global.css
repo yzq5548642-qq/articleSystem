@@ -1,0 +1,93 @@
+* {
+    /*ie盒模型*/
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    /*边距*/
+    margin: 0;
+    padding: 0;
+    /*去掉列表的样式*/
+    list-style: none;
+    /**/
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    /**/
+    user-select:none;
+    -webkit-tap-highlight-color: transparent;
+    /**/
+    outline: none;
+}
+*:not(input,textarea) {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+}
+html, body, #app {
+    height: 100%
+}
+body {
+    font-size: 12px;
+    /*color: #333;*/
+    /*background: #f2f2f2!important;*/
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+}
+label {
+    font-weight: 700;
+}
+html {
+    box-sizing: border-box;
+}
+#app {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+a:focus,
+a:active {
+    outline: none;
+}
+a,
+a:focus,
+a:hover {
+    cursor: pointer;
+    color: inherit;
+
+    /*去除a标签的下划线*/
+    text-decoration: none;
+}
+div:focus {
+    /**/
+    outline: none;
+}
+.clearfix:after {
+    /*清除浮动*/
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+}
+.clearfix{
+    zoom:1;
+}
+.fl{
+    /*向左浮动*/
+    float:left;
+}
+.fr{
+    /*向右浮动*/
+    float:right;
+}
+.container{
+    /*设置好安全距离  然后让其居中显示*/
+    width: 1190px;
+    margin: 0 auto;
+}

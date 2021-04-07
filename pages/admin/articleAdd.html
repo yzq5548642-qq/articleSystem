@@ -1,0 +1,126 @@
+<form class="layui-form" action="" enctype="multipart/form-data"><!--enctype="multipart/form-data" 表单有文本上传，这个上传需要二进制的形式上传-->
+    <div class="layui-form-item">
+        <label class="layui-form-label">标题</label>
+        <div class="layui-input-block">
+            <input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">描述</label>
+        <div class="layui-input-block">
+            <input type="text" name="description" required  lay-verify="required" placeholder="请输入文章描述" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">选择分类</label>
+        <div class="layui-input-block">
+            <select name="classify" lay-verify="required">
+                <option value=""></option>
+                <option value="学习">学习</option>
+                <option value="办公">办公</option>
+                <option value="生活">生活</option>
+                <option value="小说">小说</option>
+                <option value="生活随笔">生活随笔</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">封面图</label>
+        <div class="layui-input-block upload-layui">
+            <button type="button" class="layui-btn" id="img">
+                <i class="layui-icon">&#xe67c;</i>
+            </button>
+            <div class="img upload-img">
+                <input type="hidden" name="images">
+                <img src="" alt="">
+                <div class="img-del">
+                    <i class="layui-icon layui-icon-delete"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">文本域</label>
+        <div class="layui-input-block layui-input-block-bg">
+            <textarea name="content" placeholder="请输入内容" class="layui-textarea" style="min-height: 300px" id="con" ></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序</label>
+        <div class="layui-input-block">
+            <input type="text" name="showorder" required  lay-verify="required" placeholder="请输入文章排序，越大越靠前(必须为数字)" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+
+<script>
+    //Demo  ajax方式提交数据  ['form','jquery']
+    layui.use(['form','jquery','upload','layedit'], function(){
+        var form = layui.form;
+        var $ = layui.$;//拿到jquer模块
+        var upload = layui.upload;
+        //富文本编辑器
+        var layedit = layui.layedit;
+        layedit.set({
+            uploadImage: {
+                url: '/admin/upload' //接口url
+                ,type: 'post' //默认post
+            }
+        });
+        var layerContent = layedit.build('con'); //建立编辑器
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#img' //绑定元素
+            ,url: '/admin/upload/' //上传接口
+            ,done: function(res){
+                //上传完毕回调
+                if (!res.code){
+                    layer.msg(res.msg, {
+                        time: 1000 //1秒关闭（如果不配置，默认是3秒）
+                    },function () {
+                        $('.upload-img input').val(res.data.src);//提交val值
+                        $('.upload-img img').attr('src',res.data.src);//拿到节点设置他的属性(attr)
+                        $('.upload-img').show();//让这个进行显示
+                    })
+                }
+            }
+            ,error: function(){
+                //请求异常回调
+            }
+        });
+        $('.img-del').click(function () {
+           $('.upload-img input').val("");
+           $('.upload-img').hide();
+        });
+        //监听提交
+        form.on('submit(formDemo)', function(data){
+            // layer.msg(JSON.stringify(data.field));
+            //拿到富文本编辑器的内容
+            var content = layedit.getContent(layerContent);
+            data.field['content'] = content;
+            console.log(data.field);
+            $.post('/admin/articleAdd',data.field,function (resData) {
+                if (resData.code == 200){
+                    layer.msg(resData.msg, {
+                        icon: 1,
+                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                    }, function(){
+                         location.reload();
+                    });
+                }else {
+                    layer.msg(resData.msg, {
+                        icon: 2,
+                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                    })
+                }
+            });
+            return false;
+        });
+    });
+</script>
